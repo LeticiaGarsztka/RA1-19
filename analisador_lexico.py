@@ -1,6 +1,6 @@
 # Aluno 1: Função parseExpressao e Analisador Léxico com Autômato Finito Determinístico
 
-# Implementação do analisador léxico usando AFD com cada estado como uma função.
+# Implementação do analisador léxico usando Autômatos Finitos Determinísticos com cada estado como uma função.
 
 # ====== TOKENS RECONHECIDOS ======
 # LPAREN  -> (
@@ -88,7 +88,7 @@ def estado_numero(texto, pos):
     inicio = pos
     c = _peek
 
-    #q0: inicio -> aceita dígito ou sinal negativp
+    #q0: inicio -> aceita dígito ou sinal negativo
     if c == '-':
         pos += 1
         c = _peek(texto, pos)
