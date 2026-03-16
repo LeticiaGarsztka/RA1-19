@@ -198,6 +198,73 @@ def estado_invalido(texto, pos):
         return Token(TOKEN_ERROR, f"Caractere Inválido: '{c}'"), pos + 1
     return False, pos
     
+# ===== Método do Despachante DO AFD =====
+'''Tenta cada estado na ordem definida '''
+_ESTADOS = [
+    estado_espaco,
+    estado_lparen,
+    estado_rparen,
+    estado_numero,      # número antes de operador (para negativos)
+    estado_operador,
+    estado_identificador,
+    estado_invalido,     # fallback; a vírgula serve para dar continuidade caso queira adicionar uma linha a mais
+]
+
+def _proximo_token(texto, pos):
+    '''
+    Executa o AFD: tenta cada estado e retorna (Token|None, nova_pos).
+    Retorna (None, nova_pos) para espaços (token descartado).
+    Retorna (Token, nova_pos) para qualquer outro reconhecimento.
+    '''
+    for estado in _ESTADOS:
+        resultado, nova_pos = estado(texto, pos)
+        if resultado is False:
+            continue    # este estado não se aplica, tenta próximo 
+        return resultado, nova_pos
+    # Nunca deve chegar aqui (estado_invalido captura tudo)
+    return Token(TOKEN_ERROR, f"Falha interna pos={c}"), pos + 1
+
+# ===== Método parseExpressao  =====
+def parseExpressao(linha: str, tokens_out: list) -> bool:
+    '''
+    Analisa uma linha de expressão RPN e extrai tokens via AFD.
+    
+    === PARÂMETROS ===
+        - linha     : string com a expressão a analisar
+        - tokens_out: lista que receberá os tokens encontrados (modificada in-place, ou seja, a mesma lista da memória)
+
+    === RETORNA ===
+        - True  : se todos os tokens são válidos
+        - False : se algum token de erro foi encontrado
+    '''
+    pos = 0
+    tem_erro = False
+    while pos < len(linha):
+        token, pos = _proximo_token(linha, pos)
+        if token is None:
+            continue    # espaço descartado
+        tokens_out.append(token)
+        if token.tipo == TOKEN_ERROR:
+            tem_erro = True
+    
+    # Validação Extra: parênteses balanceados
+    profundidade = 0
+    for t in tokens_out:
+        if t.tipo == TOKEN_LPAREN:
+            profundidade += 1
+        elif t.tipo == TOKEN_RPAREN:
+            profundidade -= 1
+            if profundidade < 0:
+                tokens_out.append(Token(TOKEN_ERROR, "Parêntese ')' sem abertura"))
+                tem_erro = True
+                break
+
+    if profundidade > 0:
+        tokens_out.append(Token(TOKEN_ERROR, f"{profundidade} parêntese(s) '(' não fechados(s)"))
+        tem_erro = True
+    
+    return not tem_erro
+
 
 # ===== MAIN =====
 def main():
