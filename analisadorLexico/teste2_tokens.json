@@ -1,0 +1,406 @@
+[
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "1.5"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "*"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "4.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "*"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "OP",
+    "valor": "/"
+  },
+  {
+    "tipo": "ERROR",
+    "valor": "1 parêntese(s) '(' não fechados(s)"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "5.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "+"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "1.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "-"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "OP",
+    "valor": "*"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "10.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "//"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "1"
+  },
+  {
+    "tipo": "OP",
+    "valor": "%"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "OP",
+    "valor": "+"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "100.0"
+  },
+  {
+    "tipo": "MEMVAR",
+    "valor": "TOTAL"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "MEMVAR",
+    "valor": "TOTAL"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2"
+  },
+  {
+    "tipo": "KEYWORD",
+    "valor": "RES"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3.5"
+  },
+  {
+    "tipo": "MEMVAR",
+    "valor": "MEDIA"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "MEMVAR",
+    "valor": "MEDIA"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "1.5"
+  },
+  {
+    "tipo": "OP",
+    "valor": "+"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "OP",
+    "valor": "*"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "7"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3"
+  },
+  {
+    "tipo": "OP",
+    "valor": "^"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "-4.5"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "+"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "-3.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "*"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "4.0"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2.0"
+  },
+  {
+    "tipo": "OP",
+    "valor": "/"
+  },
+  {
+    "tipo": "OP",
+    "valor": "+"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "ERROR",
+    "valor": "1 parêntese(s) '(' não fechados(s)"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "5"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2"
+  },
+  {
+    "tipo": "OP",
+    "valor": "//"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "LPAREN",
+    "valor": "("
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "3"
+  },
+  {
+    "tipo": "NUMBER",
+    "valor": "2"
+  },
+  {
+    "tipo": "OP",
+    "valor": "%"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  },
+  {
+    "tipo": "OP",
+    "valor": "-"
+  },
+  {
+    "tipo": "RPAREN",
+    "valor": ")"
+  }
+]
