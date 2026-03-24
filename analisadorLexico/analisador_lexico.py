@@ -321,14 +321,17 @@ def executar_testes():
     return aprovados == len(testes)
 
 # ===== Método de Salvar Tokens em Arquivo =====
-def salvar_tokens(tokens: list, nome_arquivo: str):
-    ''' Salva os tokens em formato JSON -> pega o nome do arquivo e escreve os tokens em JSON'''
-    dados = [t.to_dict() for t in tokens]
+def salvar_tokens(expressoes: list, nome_arquivo: str):
+    ''' Salva as expressões em formato JSON -> pega o nome do arquivo e escreve as expressões em JSON'''
     with open(nome_arquivo, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=2)
-    print(f"Tokens salvos em: {nome_arquivo}")
+        json.dump(expressoes, f, ensure_ascii=False, indent=2)
+    print(f"Expressões salvas em: {nome_arquivo}")
 
+def executarExpressao(tokens: list):
+    dados = [t.to_dict() for t in tokens]
 
+    for dado in dados:
+        print(dado)
 
 
 # ===== MAIN =====
@@ -355,7 +358,7 @@ def main():
     print(f"\nAnalisando: {nome_arquivo}")
     print("="*60)
 
-    todos_tokens = []
+    expressoes = []
     tem_erros = False
 
     for numero, linha in enumerate(linhas, 1):
@@ -372,19 +375,24 @@ def main():
         print(f"        Válida: {"Sim" if valido else "Não"}")
         print()
 
-        todos_tokens.extend(tokens_linha)
-        if not valido:
+        if valido:
+            expressoes.append({
+                "tokens": [t.to_dict() for t in tokens_linha]
+            })
+        else:
             tem_erros = True
 
     # Salvar tokens em arquivo
     base = nome_arquivo.rsplit('.', 1)[0]
-    salvar_tokens(todos_tokens, base + "_tokens.json")
+    salvar_tokens(expressoes, base + "_tokens.json")
 
     print("=" * 60)
     if tem_erros:
         print("AVISO: foram encontrados erros léxicos.")
     else:
         print("Análise concluída sem erros.")
+
+    # executarExpressao(todos_tokens)
 
     sys.exit(1 if tem_erros else 0)
 
