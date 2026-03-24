@@ -328,10 +328,8 @@ def salvar_tokens(expressoes: list, nome_arquivo: str):
     print(f"Expressões salvas em: {nome_arquivo}")
 
 def executarExpressao(tokens: list):
-    dados = [t.to_dict() for t in tokens]
-
-    for dado in dados:
-        print(dado)
+    for token in tokens:
+        print(token)
 
 
 # ===== MAIN =====
@@ -376,9 +374,9 @@ def main():
         print()
 
         if valido:
-            expressoes.append({
-                "tokens": [t.to_dict() for t in tokens_linha]
-            })
+            expressoes.append([
+                t.to_dict() for t in tokens_linha
+            ])
         else:
             tem_erros = True
 
@@ -392,7 +390,7 @@ def main():
     else:
         print("Análise concluída sem erros.")
 
-    # executarExpressao(todos_tokens)
+    executarExpressao(expressoes)
 
     sys.exit(1 if tem_erros else 0)
 

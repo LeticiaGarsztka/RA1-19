@@ -1,258 +1,238 @@
 [
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "3.14"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "2.0"
-      },
-      {
-        "tipo": "OP",
-        "valor": "+"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "10"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "3"
-      },
-      {
-        "tipo": "OP",
-        "valor": "-"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "1.5"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "2.5"
-      },
-      {
-        "tipo": "OP",
-        "valor": "*"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "10"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "3"
-      },
-      {
-        "tipo": "OP",
-        "valor": "//"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "10"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "3"
-      },
-      {
-        "tipo": "OP",
-        "valor": "%"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "2"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "8"
-      },
-      {
-        "tipo": "OP",
-        "valor": "^"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "10.5"
-      },
-      {
-        "tipo": "MEMVAR",
-        "valor": "SOMA"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "MEMVAR",
-        "valor": "SOMA"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "1"
-      },
-      {
-        "tipo": "KEYWORD",
-        "valor": "RES"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  },
-  {
-    "tokens": [
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "2.0"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "3.0"
-      },
-      {
-        "tipo": "OP",
-        "valor": "+"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      },
-      {
-        "tipo": "LPAREN",
-        "valor": "("
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "4.0"
-      },
-      {
-        "tipo": "NUMBER",
-        "valor": "1.0"
-      },
-      {
-        "tipo": "OP",
-        "valor": "-"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      },
-      {
-        "tipo": "OP",
-        "valor": "*"
-      },
-      {
-        "tipo": "RPAREN",
-        "valor": ")"
-      }
-    ]
-  }
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "3.14"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "2.0"
+    },
+    {
+      "tipo": "OP",
+      "valor": "+"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "10"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "3"
+    },
+    {
+      "tipo": "OP",
+      "valor": "-"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "1.5"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "2.5"
+    },
+    {
+      "tipo": "OP",
+      "valor": "*"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "10"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "3"
+    },
+    {
+      "tipo": "OP",
+      "valor": "//"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "10"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "3"
+    },
+    {
+      "tipo": "OP",
+      "valor": "%"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "2"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "8"
+    },
+    {
+      "tipo": "OP",
+      "valor": "^"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "10.5"
+    },
+    {
+      "tipo": "MEMVAR",
+      "valor": "SOMA"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "MEMVAR",
+      "valor": "SOMA"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "1"
+    },
+    {
+      "tipo": "KEYWORD",
+      "valor": "RES"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ],
+  [
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "2.0"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "3.0"
+    },
+    {
+      "tipo": "OP",
+      "valor": "+"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    },
+    {
+      "tipo": "LPAREN",
+      "valor": "("
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "4.0"
+    },
+    {
+      "tipo": "NUMBER",
+      "valor": "1.0"
+    },
+    {
+      "tipo": "OP",
+      "valor": "-"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    },
+    {
+      "tipo": "OP",
+      "valor": "*"
+    },
+    {
+      "tipo": "RPAREN",
+      "valor": ")"
+    }
+  ]
 ]
