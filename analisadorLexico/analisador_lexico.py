@@ -278,7 +278,7 @@ def _executar_teste(descricao, linha, espera_valido):
     print()
     return status == "OK"
 
-def executar_testes():
+def executar_testes_aluno1():
     ''' Bateria de Testes do Analisador Léxico -> método principal '''
     print("="*60)
     print("TESTES DO ANALISADOR LÉXICO (AFD)")
@@ -321,15 +321,151 @@ def executar_testes():
     return aprovados == len(testes)
 
 # ===== Método de Salvar Tokens em Arquivo =====
-def salvar_tokens(tokens: list, nome_arquivo: str):
-    ''' Salva os tokens em formato JSON -> pega o nome do arquivo e escreve os tokens em JSON'''
-    dados = [t.to_dict() for t in tokens]
+def salvar_tokens(expressoes: list, nome_arquivo: str):
+    ''' Salva as expressões em formato JSON -> pega o nome do arquivo e escreve as expressões em JSON'''
     with open(nome_arquivo, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=2)
-    print(f"Tokens salvos em: {nome_arquivo}")
+        json.dump(expressoes, f, ensure_ascii=False, indent=2)
+    print(f"Expressões salvas em: {nome_arquivo}")
 
+def executarExpressao(expressoes: list):
 
+    instrucoes = []
+    memoria_logica = {} 
+    historico_operacoes = []
 
+    for expressao in expressoes:
+        instrucao = []
+        pilha = []
+            
+        for i in range(len(expressao)):
+            token = expressao[i]
+            if token['tipo'] in (TOKEN_LPAREN, TOKEN_RPAREN):
+                continue
+
+            if token['tipo'] == TOKEN_NUMBER:
+                pilha.append(token['valor'])
+                # Verificação para evitar PUSH de número se o próximo token for uma KEYWORD como RES
+                if i+1 < len(expressao) and not expressao[i+1]['tipo'] == TOKEN_KEYWORD:
+                     instrucao.append(("PUSH", f"{token['valor']}"))
+
+            elif token['tipo'] == TOKEN_OP:
+                op2 = pilha.pop()
+                op1 = pilha.pop()
+                pilha.append("TEMP")
+                
+                if token['valor'] == '+':
+                    operacao = "ADD"
+                elif token['valor'] == '-':
+                    operacao = "SUB"
+                elif token['valor'] == '*':
+                    operacao = "MUL"
+                elif token['valor'] == '/':
+                    operacao = "DIV"
+                elif token['valor'] == '//':
+                    operacao = "IDIV"
+                elif token['valor'] == '%':
+                    operacao = "MOD"
+                elif token['valor'] == '^':
+                    operacao = "POW"
+
+                instrucao.append((operacao,))
+
+            elif token['tipo'] == TOKEN_MEMVAR:
+
+                # O if abaixo verifica se o token é uma variável a ser armazenada ou lida, julgando se ela veio acompanhada de algum valor 
+                if pilha:
+                    pop = pilha.pop()
+                    instrucao.append(("STORE", f"{token['valor']}"))
+                    memoria_logica[token['valor']] = True
+                else:
+                    if token['valor'] in memoria_logica:
+                        instrucao.append(("LOAD", f"{token['valor']}"))
+                        pilha.append("TEMP")
+
+            elif token['tipo'] == TOKEN_KEYWORD and token['valor'] == 'RES':
+                if pilha:
+                    pop = pilha.pop()
+                    # Adiciona apenas se já houver operações suficientes
+                    if int(pop) <= len(historico_operacoes):
+                        instrucao.append(("RES", f"{pop}"))
+
+        instrucoes.append(instrucao)
+        historico_operacoes.append("TEMP")
+
+    imprimir_execucao(expressoes, instrucoes)
+
+    print("\nMemória lógica:")
+    for var in memoria_logica:
+        print("   ", var)
+
+    print("\nHistórico RES:")
+    print("   total:", len(historico_operacoes))
+            
+def imprimir_execucao(expressoes, instrucoes):
+
+    print("\n" + "="*60)
+    print("EXECUÇÃO DAS EXPRESSÕES")
+    print("="*60)
+
+    for i in range(len(expressoes)):
+
+        print(f"\nExpressão {i+1}:")
+
+        # Mostrar tokens da expressão
+        tokens_str = []
+
+        for token in expressoes[i]:
+            if token['tipo'] != TOKEN_LPAREN and token['tipo'] != TOKEN_RPAREN:
+                tokens_str.append(token['valor'])
+
+        print("Tokens:", " ".join(tokens_str))
+
+        print("Instruções geradas:")
+
+        for instr in instrucoes[i]:
+            print("   ", instr)
+
+    print("\n" + "="*60)
+
+def executar_testes_expressao():
+
+    print("="*60)
+    print("TESTES DO executarExpressao")
+    print("="*60)
+
+    arquivos = [ "teste1.txt", "teste2.txt", "teste3.txt" ]
+
+    for nome_arquivo in arquivos:
+
+        print(f"\nTestando arquivo: {nome_arquivo}")
+        print("-"*50)
+
+        try:
+            with open(nome_arquivo, 'r', encoding='utf-8') as f:
+                linhas = f.readlines()
+        except FileNotFoundError:
+            print(f"Arquivo {nome_arquivo} não encontrado.")
+            continue
+
+        expressoes = []
+
+        for linha in linhas:
+            linha = linha.strip()
+
+            if not linha or linha.startswith('#'):
+                continue
+
+            tokens_linha = []
+
+            valido = parseExpressao(linha, tokens_linha)
+
+            if valido:
+                expressoes.append([
+                    t.to_dict() for t in tokens_linha
+                ])
+
+        executarExpressao(expressoes)
+        print("Teste concluído.")
 
 # ===== MAIN =====
 def main():
@@ -340,8 +476,11 @@ def main():
         sys.exit(1)
 
     if sys.argv[1] == "--testes":
-        sucesso = executar_testes()
+        sucesso = executar_testes_aluno1()
         sys.exit(0 if sucesso else 1)
+    elif sys.argv[1] == "--testes-exec":
+        executar_testes_expressao()
+        sys.exit(0)
 
     nome_arquivo = sys.argv[1]
 
@@ -355,7 +494,7 @@ def main():
     print(f"\nAnalisando: {nome_arquivo}")
     print("="*60)
 
-    todos_tokens = []
+    expressoes = []
     tem_erros = False
 
     for numero, linha in enumerate(linhas, 1):
@@ -372,13 +511,18 @@ def main():
         print(f"        Válida: {"Sim" if valido else "Não"}")
         print()
 
-        todos_tokens.extend(tokens_linha)
-        if not valido:
+        if valido:
+            expressoes.append([
+                t.to_dict() for t in tokens_linha
+            ])
+        else:
             tem_erros = True
 
     # Salvar tokens em arquivo
     base = nome_arquivo.rsplit('.', 1)[0]
-    salvar_tokens(todos_tokens, base + "_tokens.json")
+    salvar_tokens(expressoes, base + "_tokens.json")
+
+    executarExpressao(expressoes)
 
     print("=" * 60)
     if tem_erros:
