@@ -14,6 +14,8 @@
 import sys
 import json
 
+from matplotlib.pylab import rint
+
 # ====== DEFINIÇÃO DOS TIPOS DE TOKEN ======
 TOKEN_LPAREN  = "LPAREN"
 TOKEN_RPAREN  = "RPAREN"
@@ -327,11 +329,60 @@ def salvar_tokens(expressoes: list, nome_arquivo: str):
         json.dump(expressoes, f, ensure_ascii=False, indent=2)
     print(f"Expressões salvas em: {nome_arquivo}")
 
-def executarExpressao(tokens: list):
-    for token in tokens:
-        print(token)
+def executarExpressao(expressoes: list):
 
+    pilha = []
+    instrucoes = []
 
+    memoria_logica = []
+    historico_operacoes = []
+
+    for expressao in expressoes:
+        instrucao = []
+        
+            
+        for token in expressao:
+            if token['tipo'] == TOKEN_NUMBER:
+                pilha.append(token['valor'])
+                instrucao.append(("PUSH", token['valor']))
+
+            elif token['tipo'] == TOKEN_OP:
+                op2 = pilha.pop()
+                op1 = pilha.pop()
+                pilha.append("TEMP")
+                
+                if token['valor'] == '+':
+                    operacao = "ADD"
+                elif token['valor'] == '-':
+                    operacao = "SUB"
+                elif token['valor'] == '*':
+                    operacao = "MUL"
+                elif token['valor'] == '/':
+                    operacao = "DIV"
+                elif token['valor'] == '//':
+                    operacao = "IDIV"
+                elif token['valor'] == '%':
+                    operacao = "MOD"
+                elif token['valor'] == '^':
+                    operacao = "POW"
+
+                instrucao.append((operacao,))
+
+            elif token['tipo'] == TOKEN_MEMVAR:
+                instrucao.append(("STORE", token['valor']))
+    
+            
+            elif token['tipo'] == TOKEN_KEYWORD and token['valor'] == 'RES':
+                if pilha:
+                    pop = instrucao.pop()
+                instrucao.append(("RES", f"{pop[1]}"))
+
+            
+        instrucoes.append(instrucao)
+
+       
+    print(instrucoes)
+            
 # ===== MAIN =====
 def main():
     print("main")
