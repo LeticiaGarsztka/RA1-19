@@ -13,6 +13,8 @@
 
 import sys
 import json
+import os
+from assembly import gerarAssembly, criarArquivoAssembly, lerArquivo
 
 # ====== DEFINIÇÃO DOS TIPOS DE TOKEN ======
 TOKEN_LPAREN  = "LPAREN"
@@ -327,7 +329,7 @@ def salvar_tokens(expressoes: list, nome_arquivo: str):
         json.dump(expressoes, f, ensure_ascii=False, indent=2)
     print(f"Expressões salvas em: {nome_arquivo}")
 
-def executarExpressao(expressoes: list):
+def executarExpressao(expressoes: list, nome_arq="instrucoes.json"):
 
     instrucoes = []
     memoria_logica = {} 
@@ -393,6 +395,8 @@ def executarExpressao(expressoes: list):
         historico_operacoes.append("TEMP")
 
     imprimir_execucao(expressoes, instrucoes)
+    os.makedirs("resultados_expressoes", exist_ok=True)
+    salvar_executar_arq(instrucoes, f"resultados_expressoes/{nome_arq}")
 
     print("\nMemória lógica:")
     for var in memoria_logica:
@@ -463,9 +467,44 @@ def executar_testes_expressao():
                 expressoes.append([
                     t.to_dict() for t in tokens_linha
                 ])
-
-        executarExpressao(expressoes)
+        base = nome_arquivo.replace(".txt", "")
+        executarExpressao(expressoes, f"{base}_instrucoes.json")
         print("Teste concluído.")
+
+def salvar_executar_arq(instrucoes, nome_arq="instrucoes.json"):
+    try:
+        with open(nome_arq, "w", encoding="utf-8") as f:
+            json.dump(instrucoes, f, indent=4)
+        print("Arquivo de executarExpressao gerado")
+    except Exception:
+        print("Erro na geração de arquivo")
+
+def executar_testes_assembly():
+    print("="*60)
+    print("TESTES DE GERAÇÃO DE ASSEMBLY")
+    print("="*60)
+
+    arquivos = ["teste1", "teste2", "teste3"]
+    os.makedirs("resultados_assembly", exist_ok=True)
+
+    for base in arquivos:
+        nome_json = f"resultados_expressoes/{base}_instrucoes.json"
+        print(f"\nGerando assembly para: {nome_json}")
+        print("-"*50)
+
+        if not os.path.exists(nome_json):
+            print(f"Arquivo não encontrado!")
+            print(f"Rodar: py analisador_lexico.py --testes-exec")
+        try:
+            tokens = lerArquivo(nome_json)
+            execucao, dados = gerarAssembly(tokens)
+            nome_saida = f"resultados_assembly/{base}_assembly.s"
+            criarArquivoAssembly(execucao, dados, nome_saida)
+            print(f"Assembly gerado: {nome_saida}")
+
+        except Exception as e:
+            print(f"Erro ao gerar assembly para {nome_json}: {e}")
+
 
 # ===== MAIN =====
 def main():
@@ -480,6 +519,9 @@ def main():
         sys.exit(0 if sucesso else 1)
     elif sys.argv[1] == "--testes-exec":
         executar_testes_expressao()
+        sys.exit(0)
+    elif sys.argv[1] == "--testes-assembly":
+        executar_testes_assembly()
         sys.exit(0)
 
     nome_arquivo = sys.argv[1]
@@ -522,7 +564,7 @@ def main():
     base = nome_arquivo.rsplit('.', 1)[0]
     salvar_tokens(expressoes, base + "_tokens.json")
 
-    executarExpressao(expressoes)
+    executarExpressao(expressoes, base + "_instrucoes.json")
 
     print("=" * 60)
     if tem_erros:
