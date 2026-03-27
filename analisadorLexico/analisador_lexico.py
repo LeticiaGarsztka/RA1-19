@@ -322,6 +322,111 @@ def executar_testes_aluno1():
     print("=" * 60)
     return aprovados == len(testes)
 
+def executar_testes_aluno4():
+    '''
+    Bateria de testes para validar exibirResultados e o fluxo completo.
+    Cobre expressões simples, complexas, MEM e RES.
+    '''
+
+    print('='*60)
+    print("TESTES DO ALUNO 4 - exibirResultados e fluxo completo")
+    print('='*60)
+
+    def _testar(descricao, linhas, esperados):
+        expressoes = []
+        for linha in linhas:
+            tokens_linha = []
+            if parseExpressao(linha, tokens_linha):
+                expressoes.append([t.to_dict() for t in tokens_linha])
+
+        historico, memoria = executarExpressao(expressoes, "_testes_aluno4.json")
+        resultados = historico
+
+        ok = True
+        for i, (res, esp) in enumerate(zip(resultados, esperados)):
+            # tolerância de 0.001 para floats
+            if abs(res - esp) > 0.001:
+                print(f"  [FALHOU]  {descricao} - expressão {i+1}: obteve {res}, esperava {esp}")
+                ok = False
+
+        if len(resultados) != len(esperados):
+            print(f"  [FALHOU]  {descricao} - quantidade de resultados: {len(resultados)}, esperava {len(esperados)}")
+            of = False
+
+        if ok:
+            print(f"  [OK]   {descricao}")
+
+        exibirResultados(resultados)
+        return ok
+    
+    testes = [
+        (
+            "Adição Simples",
+            ["(3.0 2.0 +)"],
+            [5.0]
+        ),
+        (
+            "Subtração",
+            ["(10 3 -)"],
+            [7.0]
+        ),
+        (
+            "Multiplicação Real",
+            ["(1.5 2.0 *)"],
+            [3.0]
+        ),
+        (
+            "Divisão Real",
+            ["(9.0 3.0 /)"],
+            [3.0]
+        ),
+        (
+            "Divisão Inteira",
+            ["(10 3 //)"],
+            [3.0]
+        ),
+        (
+            "Resto",
+            ["(10 3 %)"],
+            [1.0]
+        ),
+        (
+            "Potência",
+            ["(2 3 ^)"],
+            [8.0]
+        ),
+        (
+            "Expressão Aninhada",
+            ["((2.0 3.0 +) (4.0 1.0 -)*)"],
+            [15.0]
+        ),
+        (
+            "MEM: armazenar e ler",
+            ["(42.0 MEM)", "(MEM)"],
+            [42.0, 42.0]
+        ),
+        (
+            "RES: recuperar resultado anterior",
+            ["(3.0 2.0 +)", "(1 RES)"],
+            [5.0, 5.0]
+        ),
+        (
+            "Número Negativo",
+            ["(-3.0 2.0 +)"],
+            [-1.0]
+        ),
+        (
+            "Variável de Memória Personalizada",
+            ["(10.0 SOMA)", "(SOMA)"],
+            [10.0, 10.0]
+        ),
+    ]
+
+    aprovados = sum(1 for desc, linhas, esp in testes if _testar(desc, linhas, esp))
+    print(f"\nResultado: {aprovados}/{len(testes)} testes aprovados")
+    print("=" * 60)
+    return aprovados == len(testes)
+    
 # ===== Método de Salvar Tokens em Arquivo =====
 def salvar_tokens(expressoes: list, nome_arquivo: str):
     ''' Salva as expressões em formato JSON -> pega o nome do arquivo e escreve as expressões em JSON'''
@@ -330,82 +435,124 @@ def salvar_tokens(expressoes: list, nome_arquivo: str):
     print(f"Expressões salvas em: {nome_arquivo}")
 
 def executarExpressao(expressoes: list, nome_arq="instrucoes.json"):
+    instrucoes_totais = []
+    memoria = {}
+    historico = []
 
-    instrucoes = []
-    memoria_logica = {} 
-    historico_operacoes = []
+    def avaliar_expressao(tokens):
+        instrucoes = []
+        pilha_vals = []
+        pilha_instr = []
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            tipo = token['tipo']
+            valor = token['valor']
 
-    for expressao in expressoes:
-        instrucao = []
-        pilha = []
-            
-        for i in range(len(expressao)):
-            token = expressao[i]
-            if token['tipo'] in (TOKEN_LPAREN, TOKEN_RPAREN):
+            if tipo in (TOKEN_LPAREN, TOKEN_RPAREN):
+                i += 1
                 continue
 
-            if token['tipo'] == TOKEN_NUMBER:
-                pilha.append(token['valor'])
-                # Verificação para evitar PUSH de número se o próximo token for uma KEYWORD como RES
-                if i+1 < len(expressao) and not expressao[i+1]['tipo'] == TOKEN_KEYWORD:
-                     instrucao.append(("PUSH", f"{token['valor']}"))
+            if tipo == TOKEN_NUMBER:
+                v = float(valor)
+                pilha_vals.append(v)
+                pilha_instr.append(valor)
+                instrucoes.append(("PUSH", valor))
 
-            elif token['tipo'] == TOKEN_OP:
-                op2 = pilha.pop()
-                op1 = pilha.pop()
-                pilha.append("TEMP")
-                
-                if token['valor'] == '+':
-                    operacao = "ADD"
-                elif token['valor'] == '-':
-                    operacao = "SUB"
-                elif token['valor'] == '*':
-                    operacao = "MUL"
-                elif token['valor'] == '/':
-                    operacao = "DIV"
-                elif token['valor'] == '//':
-                    operacao = "IDIV"
-                elif token['valor'] == '%':
-                    operacao = "MOD"
-                elif token['valor'] == '^':
-                    operacao = "POW"
+            elif tipo == TOKEN_OP:
+                if len(pilha_vals) < 2:
+                    i += 1
+                    continue
 
-                instrucao.append((operacao,))
+                op2_v = pilha_vals.pop()
+                op1_v = pilha_vals.pop()
+                pilha_instr.pop()
+                pilha_instr.pop()
 
-            elif token['tipo'] == TOKEN_MEMVAR:
+                op_map = {
+                    '+':  ("ADD", lambda a, b: a + b),
+                    '-':  ("SUB", lambda a, b: a - b),
+                    '*':  ("MUL", lambda a, b: a * b),
+                    '/':  ("DIV", lambda a, b: a / b),
+                    '//': ("IDIV", lambda a, b: float(int(a) // int(b))),
+                    '%':  ("MOD", lambda a, b: float(int(a) % int(b))),
+                    '^':  ("POW", lambda a, b: a ** b),
+                }
+                nome_op, func_op = op_map[valor]
+                resultado = func_op(op1_v, op2_v)
+                pilha_vals.append(resultado)
+                pilha_instr.append("TEMP")
+                instrucoes.append((nome_op,))
 
-                # O if abaixo verifica se o token é uma variável a ser armazenada ou lida, julgando se ela veio acompanhada de algum valor 
-                if pilha:
-                    pop = pilha.pop()
-                    instrucao.append(("STORE", f"{token['valor']}"))
-                    memoria_logica[token['valor']] = True
+            elif tipo == TOKEN_MEMVAR:
+                if valor == "MEM":
+                    if "MEM" in memoria:
+                        v = memoria["MEM"]
+                        pilha_vals.append(v)
+                        pilha_instr.append("MEM")
+                        instrucoes.append(("LOAD", "MEM"))
+
                 else:
-                    if token['valor'] in memoria_logica:
-                        instrucao.append(("LOAD", f"{token['valor']}"))
-                        pilha.append("TEMP")
+                    if pilha_vals:
+                        v = pilha_vals.pop()
+                        pilha_instr.pop()
+                        memoria[valor] = v
+                        instrucoes.append(("STORE", valor))
+                    elif valor in memoria:
+                        v = memoria[valor]
+                        pilha_vals.append(v)
+                        pilha_instr.append(valor)
+                        instrucoes.append(("LOAD", valor))
 
-            elif token['tipo'] == TOKEN_KEYWORD and token['valor'] == 'RES':
-                if pilha:
-                    pop = pilha.pop()
-                    # Adiciona apenas se já houver operações suficientes
-                    if int(pop) <= len(historico_operacoes):
-                        instrucao.append(("RES", f"{pop}"))
+            elif tipo == TOKEN_KEYWORD and valor == "RES":
+                if pilha_vals: 
+                    n = int(pilha_vals.pop())
+                    pilha_instr.pop()
+                    idx = len(historico) - n
+                    if 0 <= idx < len(historico):
+                        v = historico[idx]
+                        pilha_vals.append(v)
+                        pilha_instr.append("RES_RESULT")
+                        instrucoes.append(("RES", str(n)))
 
-        instrucoes.append(instrucao)
-        historico_operacoes.append("TEMP")
+            i += 1
 
-    imprimir_execucao(expressoes, instrucoes)
+        resultado_final = pilha_vals[-1] if pilha_vals else None
+        return instrucoes, resultado_final
+
+    for expressao in expressoes:
+        instrucoes, resultado = avaliar_expressao(expressao)
+        instrucoes_totais.append(instrucoes)
+        if resultado is not None:
+            historico.append(resultado)
+
+    imprimir_execucao(expressoes, instrucoes_totais, historico, memoria)
     os.makedirs("resultados_expressoes", exist_ok=True)
-    salvar_executar_arq(instrucoes, f"resultados_expressoes/{nome_arq}")
-
-    print("\nMemória lógica:")
-    for var in memoria_logica:
-        print("   ", var)
-
-    print("\nHistórico RES:")
-    print("   total:", len(historico_operacoes))
+    salvar_executar_arq(instrucoes_totais, f'resultados_expressoes/{nome_arq}')
+    
+    return historico, memoria   # retorno para o main usar
             
-def imprimir_execucao(expressoes, instrucoes):
+def exibirResultados(resultados: list):
+    ''' Exibe os resultados das expressões em formatação clara.
+        - Números reais são exibidos sem casas decimais.
+        - Números reais são exibidos com uma casa decimal.
+    '''
+    print("\n" + "="*60)
+    print("RESULTADOS DAS EXPRESSÕES")
+    print("="*60)
+
+    if not resultados:
+        print("     Nenhum resultado calculado.")
+    else:
+        for i, val in enumerate(resultados, 1):
+            if val == int(val):
+                print(f"     Expressão {i:2d} : {int(val)}")
+            else:
+                print(f"     Expressão {i:2d} : {val:.1f}")
+    print("="*60)
+
+
+def imprimir_execucao(expressoes, instrucoes, historico=None, memoria=None):
 
     print("\n" + "="*60)
     print("EXECUÇÃO DAS EXPRESSÕES")
@@ -512,6 +659,9 @@ def main():
     if len(sys.argv) < 2:
         print("Uso: python analisador_lexico.py <arquivo.txt>")
         print("     python analisador_lexico.py --testes")
+        print("     python analisar_lexico.py --testes-exec")
+        print("     python analisar_lexico.py --testes-assembly")
+        print("     python analisar_lexico.py --testes-aluno4")
         sys.exit(1)
 
     if sys.argv[1] == "--testes":
@@ -523,7 +673,10 @@ def main():
     elif sys.argv[1] == "--testes-assembly":
         executar_testes_assembly()
         sys.exit(0)
-
+    elif sys.argv[1] == "--testes-aluno4":
+        sucesso = executar_testes_aluno4()
+        sys.exit(0 if sucesso else 1)
+    
     nome_arquivo = sys.argv[1]
 
     try:
@@ -542,7 +695,7 @@ def main():
     for numero, linha in enumerate(linhas, 1):
         linha = linha.strip()
         if not linha or linha.startswith('#'):
-            continue    # pulia linhas vazias e comentários
+            continue    # pula linhas vazias e comentários
 
         tokens_linha = []
         valido = parseExpressao(linha, tokens_linha)
@@ -564,7 +717,11 @@ def main():
     base = nome_arquivo.rsplit('.', 1)[0]
     salvar_tokens(expressoes, base + "_tokens.json")
 
-    executarExpressao(expressoes, base + "_instrucoes.json")
+    #executarExpressao(expressoes, base + "_instrucoes.json")
+    historico, memoria = executarExpressao(expressoes, base + "_instrucoes.json")
+
+    # exibirResultados com os valores calculados
+    exibirResultados(historico)
 
     print("=" * 60)
     if tem_erros:
