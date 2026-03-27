@@ -13,3 +13,6 @@ No terminal execute `py analisador_lexico.py teste1.txt`
 
 # Gerador de Assembly
 No terminal execute  `py analisador_lexico.py --testes-assembly`
+
+# Função exibirResultados
+No terminal execute `py analisador_lexico.py --testes-aluno4`
