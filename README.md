@@ -1,18 +1,27 @@
-# AnalisadorLexico
+# Fase 1 - Analisador Léxico e Gerador de Assembly para ARMv7
+Pontifícia Universidade Católica do Paraná<br>
+Disciplina: Construção de Interpretadores<br>
+Professor: Frank Coelho de Alcantara<br>
 
-## PASSO A PASSO
+## Integrantes
 
-## Rodar os testes:
-No terminal execute `py analisador_lexico.py --testes`
+- Amanda de Oliveira Barbosa dos Santos - Github: mdaoliveira
+- Felyppe Pardino da Silva - Github: felyppepardino
+- Letícia Izabelly Melnick Garsztka - Github: LeticiaGarsztka
 
-## Rodar os testes de expressão:
-No terminal execute  `py analisador_lexico.py --testes-exec`
+Grupo: **RA1 19 RA1**
 
-## Analisar um arquivo:
-No terminal execute `py analisador_lexico.py teste1.txt`
+---
 
-# Gerador de Assembly
-No terminal execute  `py analisador_lexico.py --testes-assembly`
+## Como Executar
 
-# Função exibirResultados
-No terminal execute `py analisador_lexico.py --testes-aluno4`
+### Testes do analisador léxico
+
+```py analisador_lexico.py --testes```
+
+### Testes de execução das expressões
+```py analisador_lexico.py --testes-exec```
+### Testes de Assembly
+```py analisador_lexico.py --testes-assembly```
+### Fluxo completo
+```py analisador_lexico.py --testes-aluno4```
